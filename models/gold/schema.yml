@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: final_tagged_transactions_pivot
+    description: "Pivot table of transactions with their associated tags as boolean columns"
+    columns:
+      - name: txn_id
+        description: "The unique identifier for each transaction"
+        tests:
+          - not_null
+          - unique
+      # We can't explicitly define tests for the dynamic tag columns,
+      # but we can add a generic test for all boolean columns
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "txn_id >= 0"
+          description: "Transaction ID should be a non-negative number" 

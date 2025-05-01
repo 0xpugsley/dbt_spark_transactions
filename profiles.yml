@@ -1,0 +1,11 @@
+transaction_tagging:
+  outputs:
+    dev:
+      type: spark
+      method: thrift
+      host: localhost
+      port: 10000
+      schema: default
+      database: default
+      threads: 1
+  target: dev

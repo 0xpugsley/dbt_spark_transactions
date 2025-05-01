@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: raw
+    # database: default  # your database name which will cause that docs will not be generated
+    schema: default    # your schema name
+    tables:
+      - name: raw_transactions
+        description: Raw transactions data

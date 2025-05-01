@@ -1,0 +1,11 @@
+
+target/
+dbt_packages/
+logs/
+*.dat
+metastore_db/
+.part-*
+part-*
+.python-version
+*.log
+.user.yml
