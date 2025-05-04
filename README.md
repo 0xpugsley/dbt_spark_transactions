@@ -181,6 +181,33 @@ FROM (
 ) p
 ```
 
+Its compiled version:
+```sql
+WITH base_data AS (
+    SELECT DISTINCT
+        txn_id,
+        tag
+    FROM default.tagged_transactions
+)
+
+SELECT
+    p.txn_id,
+    COALESCE(p.`RetailPurchase`, FALSE) AS `RetailPurchase`,
+    COALESCE(p.`SpecialTransaction`, FALSE) AS `SpecialTransaction`,
+    COALESCE(p.`FoodPurchase`, FALSE) AS `FoodPurchase`
+FROM (
+    SELECT * FROM base_data
+    PIVOT (
+        COUNT(tag) > 0
+        FOR tag IN (
+                'RetailPurchase', 
+                'SpecialTransaction', 
+                'FoodPurchase'
+        )
+    )
+) p
+```
+
 The model begins with a configuration `{{ config(materialized='table') }}`, indicating that the output will be stored as a persistent table. The transformation employs dbt's Jinja templating to dynamically generate the query based on distinct tags present in the `tagged_transactions` model.
 
 The Jinja block `{% set tag_query %}` defines a SQL query to extract unique tag values from `tagged_transactions`. This query is executed using `run_query(tag_query)`, and the results are processed to create a list of tags, with filters to exclude none or null values. This dynamic approach ensures the model adapts to the data, automatically accommodating new tags without requiring manual updates.
